@@ -1,0 +1,37 @@
+---
+layout: default
+title: Gallery
+---
+
+<div class="page">
+  <h1 class="page-title">Gallery</h1>
+  <p>Voici quelques photos depuis mon Flickr :</p>
+
+  <div id="gallery" 
+       style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+  </div>
+</div>
+
+<script>
+  // Remplace par TON Flickr ID (numérique)
+  fetch("https://www.flickr.com/services/feeds/photos_public.gne?id=203497831@N05&format=json&nojsoncallback=1")
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById("gallery");
+      data.items.forEach(item => {
+        const img = document.createElement("img");
+        // Charger la version plus grande (_b = large)
+        img.src = item.media.m.replace("_m", "_b");
+        img.alt = item.title;
+        img.style.width = "100%";
+        img.style.height = "auto";
+        img.style.borderRadius = "8px";
+        img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
+        container.appendChild(img);
+      });
+    })
+    .catch(error => {
+      document.getElementById("gallery").innerText = "Impossible de charger les photos.";
+      console.error(error);
+    });
+</script>
